@@ -24,6 +24,8 @@ const setupUsers = async () => {
     }
 };
 
+setupUsers(); // Call the setup function immediately to ensure users are created when the server starts
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     
@@ -88,5 +90,4 @@ router.post('/logout', (req, res) => {
     res.json({ success: true, message: "Logged out successfully" });
 });
 
-router.setupUsers = setupUsers; // Export the setup function to be called from server.js
 module.exports = router;
