@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// TABLES
+
+model Clinic {
+  id      Int     @id @default(autoincrement())
+  name    String
+  address String
+  phone   String?
+  mapUrl  String?
+  
+  // This tells Prisma that one clinic can have many pets and many users
+  pets    Pet[]    
+  users   User[] 
+}
+
+model Pet {
+  id           Int      @id @default(autoincrement())
+  species      String
+  breed        String?
+  gender       String   @default("Unknown")
+  coatColour   String
+  eyeColour    String
+  traits       String?
+  age          Int?
+  microchip    String   @default("no")
+  healthState  String?
+  status       String   @default("Unidentified")
+  image        String?
+  dateAdmitted String
+  
+  clinicId     Int?
+  clinic       Clinic?   @relation(fields: [clinicId], references: [id])
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String 
+  name     String?
+  role     String  @default("USER") 
+
+  clinicId Int?
+  clinic   Clinic? @relation(fields: [clinicId], references: [id])
+}
