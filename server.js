@@ -1,20 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const os = require('os');
+const fs = require('fs');
+const https = require('https');
+const cookieParser = require('cookie-parser');
+const { PrismaClient } = require('@prisma/client');
+
 const petRoutes = require('./routes/petRoutes');
 const authRoutes = require('./routes/authRoutes');
 
-const app = express();
-const PORT = 3001;
-const HOST = '0.0.0.0';
-
-const https = require('https');
-const fs = require('fs');
-
-const cookieParser = require('cookie-parser');
-
-const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const app = express();
+const PORT = process.env.PORT || 3001;
+const HOST = '0.0.0.0';
 
 app.use(cookieParser());
 
@@ -53,12 +51,17 @@ const getNetworkIp = () => {
     return 'localhost';
 };
 
-
-const sslOptions = {
-    key: fs.readFileSync('./certs/server.key'),
-    cert: fs.readFileSync('./certs/server.cert')
-};
-
-    https.createServer(sslOptions, app).listen(3001, '0.0.0.0', () => {
-    console.log('Server running on https://localhost:3001');
-});
+// --- THE START LOGIC ---
+if (process.env.NODE_ENV === 'production') {
+    app.listen(PORT, () => {
+        console.log(`☁️ Cloud Server running on port ${PORT}`);
+    });
+} else {
+    const options = {
+        key: fs.readFileSync('./certs/server.key'),
+        cert: fs.readFileSync('./certs/server.cert')
+    };
+    https.createServer(options, app).listen(PORT, HOST, () => {
+        console.log(`🔒 Local Secure Server running on port ${PORT}`);
+    });
+}
