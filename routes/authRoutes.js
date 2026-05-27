@@ -4,8 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
-const JWT_SECRET = "super-secret-fetchback-key-change-me";
-
+const JWT_SECRET = process.env.JWT_SECRET || "super-secret-fetchback-key-change-me";
 const setupUsers = async () => {
 
     if (process.env.NODE_ENV === 'test') return;

@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-
-const JWT_SECRET = "super-secret-fetchback-key-change-me"; // Make sure this matches the one in authRoutes.js
+const JWT_SECRET = process.env.JWT_SECRET || "super-secret-fetchback-key-change-me";
 
 const verifyToken = (req, res, next) => {
     const token = req.cookies.authToken;

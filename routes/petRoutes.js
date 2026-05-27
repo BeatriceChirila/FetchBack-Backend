@@ -4,7 +4,7 @@ const repo = require('../data/petRepository');
 const jwt = require('jsonwebtoken'); // Need this to optionally read the token
 const { verifyToken, requireVet } = require('../middleware/authMiddleware');
 
-const JWT_SECRET = "super-secret-fetchback-key-change-me";
+const JWT_SECRET = process.env.JWT_SECRET || "super-secret-fetchback-key-change-me";
 
 //Public can view, but Vets get filtered data
 router.get('/', async (req, res) => {
