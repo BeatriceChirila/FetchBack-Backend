@@ -23,7 +23,6 @@ const setupUsers = async () => {
         console.log('✅ Created default users: smith@eurovet.com (VET) and john.doe@netvet.com (VET) and jane@gmail.com (USER)');
     }
 };
-setupUsers();
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -89,4 +88,5 @@ router.post('/logout', (req, res) => {
     res.json({ success: true, message: "Logged out successfully" });
 });
 
+router.setupUsers = setupUsers; // Export the setup function to be called from server.js
 module.exports = router;
